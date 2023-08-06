@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Network">
+      <UniqueIdentifier>{a026418c-3554-47bb-bfa2-1a7b24a2631e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{305f6501-e0ba-4896-8331-bd7ad57c9f1f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CorePch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="IOCP.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h" />
+    <ClInclude Include="ListenSocket.h" />
+    <ClInclude Include="SocketBase.h" />
+    <ClInclude Include="NetAddress.h" />
+    <ClInclude Include="Server.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="CorePch.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="IOCP.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp" />
+    <ClCompile Include="ListenSocket.cpp" />
+    <ClCompile Include="SocketBase.cpp" />
+    <ClCompile Include="NetAddress.cpp" />
+    <ClCompile Include="Server.cpp" />
+  </ItemGroup>
+</Project>
