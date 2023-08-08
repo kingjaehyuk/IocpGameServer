@@ -10,7 +10,6 @@ public:
 public:
 	int Bind(NetAddress netAddress);
 	SOCKET& GetSocket() { return mSocket; }
-	int Close();
 
 protected:
 	void SetSocket(SOCKET socket);

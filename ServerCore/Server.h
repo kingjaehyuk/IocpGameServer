@@ -3,10 +3,22 @@
 class Server
 {
 public:
-	Server();
+	Server(int port, int backlog);
 	virtual ~Server();
-	bool Run(int port, int backlog);
+
+	int Init();
+
+	bool Run();
+
 private:
+	int InitSocket();
+	int BindAndListen();
+
+private:
+	int mPort;
+	int mBacklog;
+
 	IOCP mIocp;
+	ListenSocket* mListenSocket;
 };
 

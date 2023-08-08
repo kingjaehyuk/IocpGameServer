@@ -7,6 +7,12 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{305f6501-e0ba-4896-8331-bd7ad57c9f1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dump">
+      <UniqueIdentifier>{90007946-cc3f-432c-997c-b4d513424796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Operation">
+      <UniqueIdentifier>{54f13071-8124-41cc-8718-52b1e9b8ddc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -26,6 +32,21 @@
     <ClInclude Include="SocketBase.h" />
     <ClInclude Include="NetAddress.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="MiniDump.h">
+      <Filter>Dump</Filter>
+    </ClInclude>
+    <ClInclude Include="AcceptOperation.h">
+      <Filter>Network\Operation</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpOperation.h">
+      <Filter>Network\Operation</Filter>
+    </ClInclude>
+    <ClInclude Include="SendOperation.h">
+      <Filter>Network\Operation</Filter>
+    </ClInclude>
+    <ClInclude Include="ReceiveOperation.h">
+      <Filter>Network\Operation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -42,5 +63,20 @@
     <ClCompile Include="SocketBase.cpp" />
     <ClCompile Include="NetAddress.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="MiniDump.cpp">
+      <Filter>Dump</Filter>
+    </ClCompile>
+    <ClCompile Include="AcceptOperation.cpp">
+      <Filter>Network\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpOperation.cpp">
+      <Filter>Network\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="SendOperation.cpp">
+      <Filter>Network\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="ReceiveOperation.cpp">
+      <Filter>Network\Operation</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

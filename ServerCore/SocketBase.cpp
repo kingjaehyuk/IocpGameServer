@@ -24,16 +24,6 @@ int SocketBase::Bind(NetAddress netAddress)
 	return bind(mSocket, reinterpret_cast<const sockaddr*>(&netAddress.GetSockAddr()), sizeof(SOCKADDR_IN));
 }
 
-int SocketBase::Close()
-{
-	if (mSocket != INVALID_SOCKET)
-	{
-		return closesocket(mSocket);
-	}
-	
-	return SOCKET_ERROR;
-}
-
 void SocketBase::SetSocket(SOCKET socket)
 {
 	mSocket = socket;

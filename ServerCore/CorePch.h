@@ -4,6 +4,8 @@
 
 #include "Types.h"
 
+#include <cassert>
+
 #include <vector>
 #include <list>
 #include <queue>

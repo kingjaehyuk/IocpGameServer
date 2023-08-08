@@ -4,7 +4,7 @@
 
 //DWORD WINAPI makeThread(LPVOID hIOCP);
 
-IOCP::IOCP() : mListenSocket(nullptr), mIOCP(NULL)
+IOCP::IOCP() : mIOCP(NULL)
 {
 }
 
@@ -12,44 +12,12 @@ IOCP::~IOCP()
 {
 }
 
-bool IOCP::InitSocket()
-{
-	mListenSocket = new ListenSocket;
-
-	if (mListenSocket->GetSocket() == INVALID_SOCKET)
-	{
-		shutdown("IOCP 클래스 에러 - 리슨 소켓 생성 실패");
-		return false;
-	}
-
-	return true;
-}
-
-bool IOCP::BindAndListen(int port, int backlog)
-{
-	NetAddress serverAddr(port);
-
-	if (mListenSocket->Bind(serverAddr) == SOCKET_ERROR)
-	{
-		shutdown("IOCP 클래스 에러 - 리슨 소켓 바인드 실패");
-		return false;
-	};
-
-	if (mListenSocket->Listen(backlog) == SOCKET_ERROR)
-	{
-		shutdown("IOCP 클래스 에러 - 리슨 소켓 리슨 실패");
-		return false;
-	};
-
-	return true;
-}
-
-bool IOCP::InitIocp()
+int IOCP::Init()
 {
 	mIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (mIOCP == NULL) {
-		shutdown("IOCP 클래스 에러 - IOCP 핸들 생성 실패");
-		return false;
+		printf("IOCP 클래스 에러 - IOCP 핸들 생성 실패");
+		return 1;
 	}
 
 	SYSTEM_INFO systemInfo;
@@ -61,10 +29,10 @@ bool IOCP::InitIocp()
 		mThreadPool.push_back(new thread{ &IOCP::WorkerThread, this });
 	}
 
-	return true;
+	return 0;
 }
 
-void IOCP::Run()
+void IOCP::Run(ListenSocket*& listenSocket)
 {
 	NetAddress clientAddr;
 	SOCKET clientSocket;
@@ -75,7 +43,7 @@ void IOCP::Run()
 
 	while (1)
 	{
-		clientSocket = mListenSocket->Accept(clientAddr);
+		clientSocket = listenSocket->Accept(clientAddr);
 		if (clientSocket == INVALID_SOCKET)
 		{
 			printf("IOCP 클래스 에러 - 리슨 소켓에서 억셉트 실패 (%d)\n", WSAGetLastError());
@@ -102,16 +70,8 @@ void IOCP::Run()
 	}
 }
 
-void IOCP::shutdown(const char* message)
+void IOCP::WorkerThread()
 {
-	cout << message << ' ' << WSAGetLastError() << endl;
-
-	mListenSocket->Close();
-
-	WSACleanup();
-}
-
-void IOCP::WorkerThread() {
 	DWORD bytesTransferred;
 	Session* session;
 	Buffer* buffer;
@@ -151,4 +111,14 @@ void IOCP::WorkerThread() {
 			printf("eOperationType::None\n");
 		}
 	}
+}
+
+void IOCP::AcceptThread() 
+{
+	//SOCKET clientSocket;
+
+	//while (true)
+	//{
+	//	::AcceptEx(mListenSocket->GetSocket(), clientSocket)
+	//}
 }

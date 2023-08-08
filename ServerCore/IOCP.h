@@ -8,18 +8,19 @@ public:
 	IOCP();
 	virtual ~IOCP();
 
-	bool InitSocket();
-	bool BindAndListen(int port, int backlog);
-	bool InitIocp();
-	void Run();
-	//DWORD WINAPI makeThread();
+	//bool InitSocket();
+	//bool BindAndListen(int port, int backlog);
+	int Init();
+	void Run(ListenSocket*& listenSocket);
 	void WorkerThread();
+	void AcceptThread();
+	HANDLE getIocpHandle() const { return mIOCP; }
 
 private:
-	void shutdown(const char* message);
+	//void shutdown(const char* message);
 
 private:
-	ListenSocket* mListenSocket;
+	//ListenSocket* mListenSocket;
 	vector<HANDLE> hThread;
 	vector<thread*> mThreadPool;
 	map<int, Session*> mSessionList;
