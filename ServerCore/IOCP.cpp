@@ -1,10 +1,8 @@
 #include "pch.h"
 #include "IOCP.h"
-#include "Session.h"
+#include "Server.h"
 
-//DWORD WINAPI makeThread(LPVOID hIOCP);
-
-IOCP::IOCP() : mIOCP(NULL)
+IOCP::IOCP() : mIocpHandle(NULL)
 {
 }
 
@@ -14,8 +12,8 @@ IOCP::~IOCP()
 
 int IOCP::Init()
 {
-	mIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-	if (mIOCP == NULL) {
+	mIocpHandle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+	if (mIocpHandle == NULL) {
 		printf("IOCP 클래스 에러 - IOCP 핸들 생성 실패");
 		return 1;
 	}
@@ -32,42 +30,58 @@ int IOCP::Init()
 	return 0;
 }
 
-void IOCP::Run(ListenSocket*& listenSocket)
+void IOCP::Add(Session& session)
 {
-	NetAddress clientAddr;
-	SOCKET clientSocket;
+	assert(mIocpHandle != nullptr);
+	::CreateIoCompletionPort(reinterpret_cast<HANDLE>(session.GetSocket()), mIocpHandle, reinterpret_cast<ULONG_PTR>(&session), 0);
+}
 
-	Session* session;
+void IOCP::Add(ListenSocket& listenSocket)
+{
+	assert(mIocpHandle != nullptr);
+	::CreateIoCompletionPort(reinterpret_cast<HANDLE>(listenSocket.GetSocket()), mIocpHandle, reinterpret_cast<ULONG_PTR>(&listenSocket), 0);
+}
 
-	int id = 1;
-
-	while (1)
+void IOCP::Run()
+{
+	for (int i = 0; i < mThreadPool.size(); i++)
 	{
-		clientSocket = listenSocket->Accept(clientAddr);
-		if (clientSocket == INVALID_SOCKET)
-		{
-			printf("IOCP 클래스 에러 - 리슨 소켓에서 억셉트 실패 (%d)\n", WSAGetLastError());
-			return;
-		}
-
-		session = new Session(id++, clientSocket);
-		mSessionList.insert({ id, session });
-
-		CreateIoCompletionPort(reinterpret_cast<HANDLE>(session->GetSocket()), mIOCP, reinterpret_cast<ULONG_PTR>(session), 0);
-
-		int ReturnValue = session->Recv();
-
-		if (ReturnValue != ERROR_SUCCESS)
-		{
-			ReturnValue = WSAGetLastError();
-
-			if (ReturnValue != ERROR_IO_PENDING)
-			{
-				printf("IOCP 클래스 에러 - 수신 실패 (%d)\n", WSAGetLastError());
-				return;
-			}
-		}
+		mThreadPool[i]->join();
 	}
+	//NetAddress clientAddr;
+	//SOCKET clientSocket;
+
+	//Session* session;
+
+	//int id = 1;
+
+	//while (1)
+	//{
+	//	clientSocket = listenSocket->Accept(clientAddr);
+	//	if (clientSocket == INVALID_SOCKET)
+	//	{
+	//		printf("IOCP 클래스 에러 - 리슨 소켓에서 억셉트 실패 (%d)\n", WSAGetLastError());
+	//		return;
+	//	}
+
+	//	session = new Session(id++, clientSocket);
+	//	//mSessionList.insert({ id, session });
+
+	//	CreateIoCompletionPort(reinterpret_cast<HANDLE>(session->GetSocket()), mIOCP, reinterpret_cast<ULONG_PTR>(session), 0);
+
+	//	int ReturnValue = session->Recv();
+
+	//	if (ReturnValue != ERROR_SUCCESS)
+	//	{
+	//		ReturnValue = WSAGetLastError();
+
+	//		if (ReturnValue != ERROR_IO_PENDING)
+	//		{
+	//			printf("IOCP 클래스 에러 - 수신 실패 (%d)\n", WSAGetLastError());
+	//			return;
+	//		}
+	//	}
+	//}
 }
 
 void IOCP::WorkerThread()
@@ -78,7 +92,7 @@ void IOCP::WorkerThread()
 	eOperationType operationType;
 	while (true)
 	{
-		if (::GetQueuedCompletionStatus(mIOCP, &bytesTransferred, (PULONG_PTR)&session, (LPOVERLAPPED*)&buffer, INFINITE) == 0)
+		if (::GetQueuedCompletionStatus(mIocpHandle, &bytesTransferred, (PULONG_PTR)&session, (LPOVERLAPPED*)&buffer, INFINITE) == 0)
 		{
 			printf("IOCP 클래스 에러 - GetQueuedCompletionStatus 실패 (%d)\n", WSAGetLastError());
 			delete session;
@@ -95,7 +109,7 @@ void IOCP::WorkerThread()
 				continue;
 			}
 
-			printf("수신된 메세지: %s (%d bytes)\n", buffer->wsaBuffer.buf, bytesTransferred);
+			printf("[%d] 수신된 메세지: %s (%d bytes)\n", session->GetId(), buffer->wsaBuffer.buf, bytesTransferred);
 
 			session->Send(buffer->wsaBuffer.buf, bytesTransferred); // Echo
 
@@ -103,22 +117,19 @@ void IOCP::WorkerThread()
 		}
 		else if (operationType == eOperationType::Send)
 		{
-			printf("송신된 메세지: %s (%d bytes)\n", buffer->wsaBuffer.buf, buffer->wsaBuffer.len);
+			printf("[%d] 송신된 메세지: %s (%d bytes)\n", session->GetId(), buffer->wsaBuffer.buf, buffer->wsaBuffer.len);
 			delete buffer;
 		}
-		else 
+		else if (operationType == eOperationType::Accept)
+		{
+			ListenSocket* listenSocket = reinterpret_cast<ListenSocket*>(session);
+			listenSocket->Accept();
+
+			printf("억셉트 성공\n");
+		}
+		else
 		{
 			printf("eOperationType::None\n");
 		}
 	}
-}
-
-void IOCP::AcceptThread() 
-{
-	//SOCKET clientSocket;
-
-	//while (true)
-	//{
-	//	::AcceptEx(mListenSocket->GetSocket(), clientSocket)
-	//}
 }

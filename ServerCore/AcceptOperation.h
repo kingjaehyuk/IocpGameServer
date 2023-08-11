@@ -3,5 +3,8 @@
 
 class AcceptOperation : public IocpOperation
 {
+public:
+	AcceptOperation();
+	virtual ~AcceptOperation();
 };
 

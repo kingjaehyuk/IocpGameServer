@@ -1,6 +1,6 @@
 #pragma once
-#include "ListenSocket.h"
 #include "Session.h"
+#include "ListenSocket.h"
 
 class IOCP
 {
@@ -8,23 +8,18 @@ public:
 	IOCP();
 	virtual ~IOCP();
 
-	//bool InitSocket();
-	//bool BindAndListen(int port, int backlog);
 	int Init();
-	void Run(ListenSocket*& listenSocket);
+	void Run();
 	void WorkerThread();
-	void AcceptThread();
-	HANDLE getIocpHandle() const { return mIOCP; }
+	HANDLE GetIocpHandle() const { return mIocpHandle; }
+	void Add(ListenSocket& listenSocket);
+	void Add(Session& session);
+
 
 private:
-	//void shutdown(const char* message);
-
-private:
-	//ListenSocket* mListenSocket;
 	vector<HANDLE> hThread;
 	vector<thread*> mThreadPool;
-	map<int, Session*> mSessionList;
-	HANDLE mIOCP;
+	HANDLE mIocpHandle;
 };
 
 /*

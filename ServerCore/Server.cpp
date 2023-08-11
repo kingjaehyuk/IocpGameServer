@@ -29,12 +29,25 @@ int Server::Init()
 		return 1;
 	}
 
+	if (mIocp.Init())
+	{
+		printf("IOCP 클래스 에러 - IOCP 초기화 실패");
+		return 1;
+	}
+
+	mIocp.Add(*mListenSocket);
+
+	for (int i = 0; i < MAX_RESERVE_SESSION_COUNT; i++)
+	{
+		mReserveSessionList.push(new Session(*this, ++mSessionId));
+	}
+
 	return 0;
 }
 
 int Server::InitSocket()
 {
-	mListenSocket = new ListenSocket;
+	mListenSocket = new ListenSocket(*this);
 
 	if (mListenSocket->GetSocket() == INVALID_SOCKET)
 	{
@@ -64,19 +77,40 @@ int Server::BindAndListen()
 	return 0;
 }
 
+Session* Server::GetReserveSession()
+{
+	if (mReserveSessionList.size() < MAX_RESERVE_SESSION_COUNT) {
+		mReserveSessionList.push(new Session(*this, ++mSessionId));
+	}
+
+	return mReserveSessionList.front();
+}
+
+void Server::PopReserveSession()
+{
+	mReserveSessionList.pop();
+}
+
+int Server::AddSession()
+{
+	Session* session = GetReserveSession();
+	mIocp.Add(*session);
+
+	mSessionList.insert(session);
+
+	session->Recv();
+
+	PopReserveSession();
+	return 0;
+}
 
 bool Server::Run()
 {
 	// Init 안부른듯
 	assert(mListenSocket != nullptr);
 
-	if (mIocp.Init())
-	{
-		printf("IOCP 클래스 에러 - IOCP 초기화 실패");
-		return false;
-	}
-
-	mIocp.Run(mListenSocket);
+	mListenSocket->RegisterAccept();
+	mIocp.Run();
 	
 	return true;
 }

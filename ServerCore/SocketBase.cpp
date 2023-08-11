@@ -24,6 +24,16 @@ int SocketBase::Bind(NetAddress netAddress)
 	return bind(mSocket, reinterpret_cast<const sockaddr*>(&netAddress.GetSockAddr()), sizeof(SOCKADDR_IN));
 }
 
+int SocketBase::SetSockOpt(SOCKET listenSocket)
+{
+	if (::setsockopt(mSocket, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, reinterpret_cast<char*>(&listenSocket), sizeof(listenSocket)))
+	{
+		return 1;
+	}
+
+	return 0;
+}
+
 void SocketBase::SetSocket(SOCKET socket)
 {
 	mSocket = socket;

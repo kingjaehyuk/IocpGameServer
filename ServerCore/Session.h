@@ -1,46 +1,50 @@
 #pragma once
 #include "SocketBase.h"
+#include "Buffer.h"
 
-constexpr int MAX_BUFFER = 1024;
+//constexpr int MAX_BUFFER = 1024;
 
-class Buffer : public OVERLAPPED
-{
-public:
-	//~Buffer()
-	//{
-	//	//delete Pointer;
-	//	//delete hEvent;
-	//	delete[] messageBuffer;
-	//};
+class Server;
 
-public:
-	WSABUF wsaBuffer;
-	char messageBuffer[MAX_BUFFER];
-	eOperationType GetOperationType() { return mOperationType; }
-	void SetOperationType(eOperationType operationType) { mOperationType = operationType; }
-private:
-	eOperationType mOperationType;
-
-};
+//class Buffer : public OVERLAPPED
+//{
+//public:
+//	//~Buffer()
+//	//{
+//	//	//delete Pointer;
+//	//	//delete hEvent;
+//	//	delete[] messageBuffer;
+//	//};
+//
+//public:
+//	WSABUF wsaBuffer;
+//	char messageBuffer[MAX_BUFFER];
+//	eOperationType GetOperationType() { return mOperationType; }
+//	void SetOperationType(eOperationType operationType) { mOperationType = operationType; }
+//private:
+//	eOperationType mOperationType;
+//
+//};
 
 class Session : public SocketBase
 {
 public:
-	Session(int id);
-	Session(int id, SOCKET socket);
-	void Init(eOperationType operationType = eOperationType::None);
-
+	Session(Server& server);
+	Session(Server& server, int id);
+	Session(Server& server, int id, SOCKET socket);
+	//void Init(eOperationType operationType = eOperationType::None);
+	virtual ~Session();
 public:
 	int GetId() { return mId; }
-	//
-	bool Recv();
-	int Send(const char* data, int size);
 
+	int Recv();
+	int Send(const char* data, int size);
 public:
-	Buffer recvBuffer;
+	Buffer* recvBuffer;
 	DWORD receiveBytes = 0;
 
 private:
 	int mId;
+	Server& mServer;
 };
 

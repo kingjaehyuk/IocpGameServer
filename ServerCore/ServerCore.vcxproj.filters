@@ -47,6 +47,8 @@
     <ClInclude Include="ReceiveOperation.h">
       <Filter>Network\Operation</Filter>
     </ClInclude>
+    <ClInclude Include="IServer.h" />
+    <ClInclude Include="Buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -78,5 +80,7 @@
     <ClCompile Include="ReceiveOperation.cpp">
       <Filter>Network\Operation</Filter>
     </ClCompile>
+    <ClCompile Include="IServer.cpp" />
+    <ClCompile Include="Buffer.cpp" />
   </ItemGroup>
 </Project>
