@@ -13,6 +13,9 @@
     <Filter Include="Network\Operation">
       <UniqueIdentifier>{54f13071-8124-41cc-8718-52b1e9b8ddc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{099a743a-390c-40f6-81fb-4fff3e38eef5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="IServer.h" />
     <ClInclude Include="Buffer.h" />
+    <ClInclude Include="RingBuffer.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -82,5 +88,8 @@
     </ClCompile>
     <ClCompile Include="IServer.cpp" />
     <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="RingBuffer.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
