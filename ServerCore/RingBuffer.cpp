@@ -4,6 +4,7 @@
 RingBuffer::RingBuffer(int size)
 {
 	mBuffer = new char[size];
+	
 	mReadCursor = mBuffer;
 	mWriteCursor = mBuffer;
 
@@ -13,45 +14,111 @@ RingBuffer::RingBuffer(int size)
 
 RingBuffer::~RingBuffer()
 {
-	delete[] mBuffer;
+	mWriteCursor = nullptr;
+	mReadCursor = nullptr;
+	mBegin = nullptr;
+	mEnd = nullptr;
+
+	if (mBuffer != nullptr)
+		delete[] mBuffer;
+	mBuffer = nullptr;
 }
 
-int RingBuffer::Push(char* data, int size)
+int RingBuffer::Write(const char* data, int size)
 {
-	if (size > GetRemainingSize())
+	int freeSize = GetFreeSize();
+	if (size > freeSize)
 	{
-		return 1;
+		return 0;
 	}
 
-	if (mWriteCursor > mReadCursor)
-	{
-		if (mEnd - mWriteCursor >= size)
-		{
-			memcpy_s(mWriteCursor, size, data, size);
-			MoveWriteCursor(size);
-			return 0;
-		}
-	}
-	else
-	{
+	int unbrokenWriteSize = GetUnbrokenWriteSize();
 
+	if (unbrokenWriteSize >= size)
+	{
+		memcpy_s(mWriteCursor, size, data, size);
+		MoveWriteCursor(size);
+		return size;
 	}
-	
+
+	memcpy_s(mWriteCursor, unbrokenWriteSize, data, unbrokenWriteSize);
+
+	int remainingSize = size - unbrokenWriteSize;
+	memcpy_s(mBegin, remainingSize, data + unbrokenWriteSize, remainingSize);
+
+	MoveWriteCursor(size);
+
+	return size;
+}
+
+int RingBuffer::Read(char* dest, int size)
+{
+	int usedSize = GetUsedSize();
+	if (size > usedSize)
+	{
+		return 0;
+	}
+
+	int unbrokenReadSize = GetUnbrokenReadSize();
+
+	if (unbrokenReadSize <= size)
+	{
+		memcpy_s(dest, size, mReadCursor, size);
+		MoveReadCursor(size);
+		return size;
+	}
+
+	memcpy_s(dest, unbrokenReadSize, mReadCursor, unbrokenReadSize);
+
+	int remainingSize = size - unbrokenReadSize;
+	memcpy_s(dest + unbrokenReadSize, remainingSize, mBegin, remainingSize);
+
+	MoveReadCursor(size);
+
+	return size;
+}
+
+int RingBuffer::Peek(char* dest, int size)
+{
+	int usedSize = GetUsedSize();
+	if (size > usedSize)
+	{
+		return 0;
+	}
+
+	int unbrokenReadSize = GetUnbrokenReadSize();
+
+	if (unbrokenReadSize <= size)
+	{
+		memcpy_s(dest, size, mReadCursor, size);
+		
+		return size;
+	}
+
+	memcpy_s(dest, unbrokenReadSize, mReadCursor, unbrokenReadSize);
+
+	int remainingSize = size - unbrokenReadSize;
+	memcpy_s(dest + unbrokenReadSize, remainingSize, mBegin, remainingSize);
 
 	return 0;
 }
 
-int RingBuffer::Pop(char* data, int size)
+char* RingBuffer::GetWriteCursor() const
 {
-	return 0;
+	return mWriteCursor;
 }
 
-int RingBuffer::GetCapacity()
+char* RingBuffer::GetReadCursor() const
+{
+	return mReadCursor;
+}
+
+int RingBuffer::GetCapacity() const
 {
 	return static_cast<int>(mEnd - mBegin);
 }
 
-int RingBuffer::GetUsedSize()
+int RingBuffer::GetUsedSize() const
 {
 	if (mReadCursor > mWriteCursor)
 	{
@@ -60,13 +127,33 @@ int RingBuffer::GetUsedSize()
 	return static_cast<int>(mWriteCursor - mReadCursor);
 }
 
-int RingBuffer::GetRemainingSize()
+int RingBuffer::GetFreeSize() const
 {
-	if (mWriteCursor > mReadCursor)
+	if (mWriteCursor >= mReadCursor)
 	{
 		return static_cast<int>((mEnd - mWriteCursor) + (mReadCursor - mBegin));
 	}
 	return static_cast<int>(mReadCursor - mWriteCursor);
+}
+
+int RingBuffer::GetUnbrokenWriteSize() const
+{
+	if (mWriteCursor >= mReadCursor)
+	{
+		return mEnd - mWriteCursor;
+	}
+
+	return mReadCursor - mWriteCursor;
+}
+
+int RingBuffer::GetUnbrokenReadSize() const
+{
+	if (mWriteCursor > mReadCursor)
+	{
+		return mWriteCursor - mReadCursor;
+	}
+
+	return mEnd - mReadCursor;
 }
 
 void RingBuffer::MoveWriteCursor(int size)
@@ -78,5 +165,17 @@ void RingBuffer::MoveWriteCursor(int size)
 	else
 	{
 		mWriteCursor += size;
+	}
+}
+
+void RingBuffer::MoveReadCursor(int size)
+{
+	if (mReadCursor + size > mEnd)
+	{
+		mReadCursor = mBegin + (mReadCursor + size - mEnd);
+	}
+	else
+	{
+		mReadCursor += size;
 	}
 }
