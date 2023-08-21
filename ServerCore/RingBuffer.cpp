@@ -42,11 +42,11 @@ int RingBuffer::Write(const char* data, int size)
 	}
 
 	memcpy_s(mWriteCursor, unbrokenWriteSize, data, unbrokenWriteSize);
+	MoveWriteCursor(unbrokenWriteSize);
 
 	int remainingSize = size - unbrokenWriteSize;
-	memcpy_s(mBegin, remainingSize, data + unbrokenWriteSize, remainingSize);
-
-	MoveWriteCursor(size);
+	memcpy_s(mWriteCursor, remainingSize, data + unbrokenWriteSize, remainingSize);
+	MoveWriteCursor(remainingSize);
 
 	return size;
 }
@@ -69,11 +69,11 @@ int RingBuffer::Read(char* dest, int size)
 	}
 
 	memcpy_s(dest, unbrokenReadSize, mReadCursor, unbrokenReadSize);
+	MoveReadCursor(unbrokenReadSize);
 
 	int remainingSize = size - unbrokenReadSize;
-	memcpy_s(dest + unbrokenReadSize, remainingSize, mBegin, remainingSize);
-
-	MoveReadCursor(size);
+	memcpy_s(dest + unbrokenReadSize, remainingSize, mReadCursor, remainingSize);
+	MoveReadCursor(remainingSize);
 
 	return size;
 }
@@ -91,16 +91,15 @@ int RingBuffer::Peek(char* dest, int size)
 	if (unbrokenReadSize <= size)
 	{
 		memcpy_s(dest, size, mReadCursor, size);
-		
 		return size;
 	}
 
 	memcpy_s(dest, unbrokenReadSize, mReadCursor, unbrokenReadSize);
 
 	int remainingSize = size - unbrokenReadSize;
-	memcpy_s(dest + unbrokenReadSize, remainingSize, mBegin, remainingSize);
+	memcpy_s(dest + unbrokenReadSize, remainingSize, mReadCursor, remainingSize);
 
-	return 0;
+	return size;
 }
 
 char* RingBuffer::GetWriteCursor() const
@@ -138,7 +137,7 @@ int RingBuffer::GetFreeSize() const
 
 int RingBuffer::GetUnbrokenWriteSize() const
 {
-	if (mWriteCursor >= mReadCursor)
+	if (mWriteCursor > mReadCursor)
 	{
 		return mEnd - mWriteCursor;
 	}
@@ -158,24 +157,20 @@ int RingBuffer::GetUnbrokenReadSize() const
 
 void RingBuffer::MoveWriteCursor(int size)
 {
-	if (mWriteCursor + size > mEnd)
+	mWriteCursor += size;
+
+	if (mWriteCursor > mEnd)
 	{
-		mWriteCursor = mBegin + (mWriteCursor + size - mEnd);
-	}
-	else
-	{
-		mWriteCursor += size;
+		mWriteCursor = mBegin + (mWriteCursor - mEnd);
 	}
 }
 
 void RingBuffer::MoveReadCursor(int size)
 {
-	if (mReadCursor + size > mEnd)
+	mReadCursor += size;
+
+	if (mReadCursor > mEnd)
 	{
-		mReadCursor = mBegin + (mReadCursor + size - mEnd);
-	}
-	else
-	{
-		mReadCursor += size;
+		mReadCursor = mBegin + (mReadCursor - mEnd);
 	}
 }

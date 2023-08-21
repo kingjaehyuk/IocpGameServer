@@ -23,7 +23,7 @@ int main()
     char randomString[10];
     char* message = new char[10];
 
-    for (int i = 0; i < 2; i++) 
+    for (int i = 0; i < 22; i++) 
     {
         printf("%d회\n", i + 1);
 
@@ -32,14 +32,14 @@ int main()
 
         b->Write(randomString, (int)strlen(randomString) + 1);
         printf("Write: free: %d, used: %d\n", b->GetFreeSize(), b->GetUsedSize());
-        printf("WC: %p, RC: %p\n", b->GetWriteCursor(), b->GetReadCursor());
+        //printf("WC: %p, RC: %p\n", b->GetWriteCursor(), b->GetReadCursor());
 
         b->Peek(message, 10);
         printf("Peek : %s\n", message);
 
         b->Read(message, (int)strlen(randomString) + 1);
         printf("Read : free: %d, used: %d\n", b->GetFreeSize(), b->GetUsedSize());
-        printf("WC: %p, RC: %p\n", b->GetWriteCursor(), b->GetReadCursor());
+        //printf("WC: %p, RC: %p\n", b->GetWriteCursor(), b->GetReadCursor());
 
         printf("%s, %d\n\n", message, (int)strlen(message));
     }
