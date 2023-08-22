@@ -102,14 +102,10 @@ int RingBuffer::Peek(char* dest, int size)
 	return size;
 }
 
-char* RingBuffer::GetWriteCursor() const
+void RingBuffer::Clear()
 {
-	return mWriteCursor;
-}
-
-char* RingBuffer::GetReadCursor() const
-{
-	return mReadCursor;
+	mWriteCursor = mBegin;
+	mReadCursor = mBegin;
 }
 
 int RingBuffer::GetCapacity() const
@@ -139,20 +135,20 @@ int RingBuffer::GetUnbrokenWriteSize() const
 {
 	if (mWriteCursor > mReadCursor)
 	{
-		return mEnd - mWriteCursor;
+		return static_cast<int>(mEnd - mWriteCursor);
 	}
 
-	return mReadCursor - mWriteCursor;
+	return static_cast<int>(mReadCursor - mWriteCursor);
 }
 
 int RingBuffer::GetUnbrokenReadSize() const
 {
 	if (mWriteCursor > mReadCursor)
 	{
-		return mWriteCursor - mReadCursor;
+		return static_cast<int>(mWriteCursor - mReadCursor);
 	}
 
-	return mEnd - mReadCursor;
+	return static_cast<int>(mEnd - mReadCursor);
 }
 
 void RingBuffer::MoveWriteCursor(int size)

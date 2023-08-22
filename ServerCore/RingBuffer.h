@@ -9,9 +9,13 @@ public:
 	int Write(const char* data, int size);
 	int Read(char* dest, int size);
 	int Peek(char* dest, int size);
+	void Clear();
 
-	char* GetWriteCursor() const;
-	char* GetReadCursor() const;
+	char* GetWriteCursor() const { return mWriteCursor;  }
+	char* GetReadCursor() const { return mReadCursor; }
+	char* GetBegin() const { return mBegin; }
+	char* GetEnd() const { return mEnd; }
+
 	int GetCapacity() const;
 	int GetUsedSize() const;
 	int GetFreeSize() const;
