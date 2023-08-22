@@ -3,5 +3,8 @@
 
 class SendOperation :IocpOperation
 {
+public:
+	SendOperation();
+	virtual ~SendOperation();
 };
 

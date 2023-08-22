@@ -3,7 +3,6 @@
 
 AcceptOperation::AcceptOperation() : IocpOperation(eOperationType::Accept)
 {
-	
 }
 
 AcceptOperation::~AcceptOperation()
