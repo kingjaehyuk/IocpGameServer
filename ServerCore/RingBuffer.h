@@ -1,17 +1,20 @@
 #pragma once
-constexpr int MAX_RING_BUFFER_SIZE = 1024;
+
 class RingBuffer
 {
 public:
-	RingBuffer(int size = MAX_RING_BUFFER_SIZE);
+	RingBuffer(int capacity);
 	virtual ~RingBuffer();
 
 	int Write(const char* data, int size);
 	int Read(char* dest, int size);
 	int Peek(char* dest, int size);
 	void Clear();
+	void MoveWriteCursor(int size);
+	void MoveReadCursor(int size);
 
-	char* GetWriteCursor() const { return mWriteCursor;  }
+	char* GetBuffer() const { return mBuffer; }
+	char* GetWriteCursor() const { return mWriteCursor; }
 	char* GetReadCursor() const { return mReadCursor; }
 	char* GetBegin() const { return mBegin; }
 	char* GetEnd() const { return mEnd; }
@@ -23,9 +26,6 @@ public:
 	int GetUnbrokenReadSize() const;
 
 private:
-	void MoveWriteCursor(int size);
-	void MoveReadCursor(int size);
-
 	char* mBuffer;
 	char* mWriteCursor;
 	char* mReadCursor;

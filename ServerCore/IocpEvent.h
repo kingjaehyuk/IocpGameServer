@@ -6,7 +6,7 @@ public:
 	virtual ~IocpEvent();
 public:
 	void Init();
-	eIocpEventType getEventType() const { return mEventType; }
+	eIocpEventType GetEventType() const { return mEventType; }
 private:
 	eIocpEventType mEventType;
 };

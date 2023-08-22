@@ -1,15 +1,15 @@
 #include "pch.h"
 #include "RingBuffer.h"
 
-RingBuffer::RingBuffer(int size)
+RingBuffer::RingBuffer(int capacity)
 {
-	mBuffer = new char[size];
+	mBuffer = new char[capacity];
 	
 	mReadCursor = mBuffer;
 	mWriteCursor = mBuffer;
 
 	mBegin = mBuffer;
-	mEnd = mBuffer + size;
+	mEnd = mBuffer + capacity;
 }
 
 RingBuffer::~RingBuffer()
@@ -49,6 +49,11 @@ int RingBuffer::Write(const char* data, int size)
 	MoveWriteCursor(remainingSize);
 
 	return size;
+}
+
+int RingBuffer::Write(int size)
+{
+	return 0;
 }
 
 int RingBuffer::Read(char* dest, int size)
