@@ -5,6 +5,3 @@ SendEvent::SendEvent() : IocpEvent(eIocpEventType::Send)
 {
 }
 
-SendEvent::~SendEvent()
-{
-}

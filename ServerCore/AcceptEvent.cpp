@@ -4,7 +4,3 @@
 AcceptEvent::AcceptEvent() : IocpEvent(eIocpEventType::Accept)
 {
 }
-
-AcceptEvent::~AcceptEvent()
-{
-}

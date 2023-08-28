@@ -88,20 +88,22 @@ void IOCP::WorkerThread()
 {
 	DWORD bytesTransferred;
 	Session* session;
-	Buffer* buffer;
-	eOperationType operationType;
+	//Buffer* buffer;
+	IocpEvent* iocpEvent;
+	eIocpEventType eventType;
 	while (true)
 	{
-		if (::GetQueuedCompletionStatus(mIocpHandle, &bytesTransferred, (PULONG_PTR)&session, (LPOVERLAPPED*)&buffer, INFINITE) == 0)
+		if (::GetQueuedCompletionStatus(mIocpHandle, &bytesTransferred, (PULONG_PTR)&session, reinterpret_cast<LPOVERLAPPED*>(&iocpEvent), INFINITE) == 0)
 		{
 			printf("IOCP 클래스 에러 - GetQueuedCompletionStatus 실패 (%d)\n", WSAGetLastError());
 			delete session;
 			continue;
 		}
 
-		operationType = buffer->GetOperationType();
+		//eventType = buffer->GetEventType();
+		eventType = iocpEvent->GetEventType();
 
-		if (operationType == eOperationType::Recv)
+		if (eventType == eIocpEventType::Recv)
 		{
 			if (bytesTransferred == 0)
 			{
@@ -109,21 +111,24 @@ void IOCP::WorkerThread()
 				continue;
 			}
 
-			printf("[%d] 수신된 메세지: %s (%d bytes)\n", session->GetId(), buffer->wsaBuffer.buf, bytesTransferred);
+			//printf("[%d] 수신된 메세지: %s (%d bytes)\n", session->GetId(), buffer->wsaBuffer.buf, bytesTransferred);
 
-			session->Send(buffer->wsaBuffer.buf, bytesTransferred); // Echo
+			session->HandleRecv(bytesTransferred);
 
-			session->Recv();
+			//session->Send(buffer->wsaBuffer.buf, bytesTransferred); // Echo
+
 		}
-		else if (operationType == eOperationType::Send)
+		else if (eventType == eIocpEventType::Send)
 		{
-			printf("[%d] 송신된 메세지: %s (%d bytes)\n", session->GetId(), buffer->wsaBuffer.buf, buffer->wsaBuffer.len);
-			delete buffer;
+			//printf("[%d] 송신된 메세지: %s (%d bytes)\n", session->GetId(), buffer->wsaBuffer.buf, buffer->wsaBuffer.len);
+			printf("[%d] 송신된 메세지: %s (%d bytes)\n", session->GetId(), static_cast<SendEvent*>(iocpEvent)->Buffer, sizeof(static_cast<SendEvent*>(iocpEvent)->Buffer) / sizeof(char));
+			
+			delete iocpEvent;
 		}
-		else if (operationType == eOperationType::Accept)
+		else if (eventType == eIocpEventType::Accept)
 		{
 			ListenSocket* listenSocket = reinterpret_cast<ListenSocket*>(session);
-			listenSocket->Accept();
+			listenSocket->HandleAccept();
 
 			printf("억셉트 성공\n");
 		}

@@ -5,6 +5,5 @@ class AcceptEvent : public IocpEvent
 {
 public:
 	AcceptEvent();
-	virtual ~AcceptEvent();
 };
 

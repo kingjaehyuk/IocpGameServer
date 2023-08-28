@@ -1,10 +1,12 @@
 #pragma once
+#include "RingBuffer.h"
+
 constexpr int MAX_BUFFER = 1024;
 
 class Buffer : public OVERLAPPED
 {
 public:
-	Buffer(eOperationType operationType);
+	Buffer(eIocpEventType eventType);
 
 	void Init();
 	//~Buffer()
@@ -16,8 +18,9 @@ public:
 
 	public:
 		WSABUF wsaBuffer;
-		char messageBuffer[MAX_BUFFER];
-		eOperationType GetOperationType() { return mOperationType; }
+		//char messageBuffer[MAX_BUFFER];
+		RingBuffer* messageBuffer;
+		eIocpEventType GetEventType() { return mEventType; }
 	private:
-		eOperationType mOperationType;
+		eIocpEventType mEventType;
 };

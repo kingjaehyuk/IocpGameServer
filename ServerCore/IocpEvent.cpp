@@ -6,10 +6,6 @@ IocpEvent::IocpEvent(eIocpEventType eventType) : mEventType(eventType)
 	Init();
 }
 
-IocpEvent::~IocpEvent()
-{
-}
-
 void IocpEvent::Init()
 {
 	Internal = 0;

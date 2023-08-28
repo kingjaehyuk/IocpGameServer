@@ -1,10 +1,11 @@
 #pragma once
 #include "IocpEvent.h"
 
-class SendEvent :IocpEvent
+class SendEvent :public IocpEvent
 {
 public:
 	SendEvent();
-	virtual ~SendEvent();
+public:
+	char* Buffer;
 };
 

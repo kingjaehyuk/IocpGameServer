@@ -3,7 +3,6 @@ class IocpEvent : public OVERLAPPED
 {
 public:
 	IocpEvent(eIocpEventType eventType);
-	virtual ~IocpEvent();
 public:
 	void Init();
 	eIocpEventType GetEventType() const { return mEventType; }

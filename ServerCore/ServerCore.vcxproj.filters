@@ -10,11 +10,11 @@
     <Filter Include="Dump">
       <UniqueIdentifier>{90007946-cc3f-432c-997c-b4d513424796}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Network\Operation">
-      <UniqueIdentifier>{54f13071-8124-41cc-8718-52b1e9b8ddc2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Memory">
       <UniqueIdentifier>{099a743a-390c-40f6-81fb-4fff3e38eef5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Event">
+      <UniqueIdentifier>{54f13071-8124-41cc-8718-52b1e9b8ddc2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,23 +38,24 @@
     <ClInclude Include="MiniDump.h">
       <Filter>Dump</Filter>
     </ClInclude>
-    <ClInclude Include="AcceptOperation.h">
-      <Filter>Network\Operation</Filter>
+    <ClInclude Include="AcceptEvent.h">
+      <Filter>Network\Event</Filter>
     </ClInclude>
-    <ClInclude Include="IocpOperation.h">
-      <Filter>Network\Operation</Filter>
+    <ClInclude Include="IocpEvent.h">
+      <Filter>Network\Event</Filter>
     </ClInclude>
-    <ClInclude Include="SendOperation.h">
-      <Filter>Network\Operation</Filter>
+    <ClInclude Include="SendEvent.h">
+      <Filter>Network\Event</Filter>
     </ClInclude>
-    <ClInclude Include="ReceiveOperation.h">
-      <Filter>Network\Operation</Filter>
+    <ClInclude Include="RecvEvent.h">
+      <Filter>Network\Event</Filter>
     </ClInclude>
     <ClInclude Include="IServer.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="RingBuffer.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="RecvBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -74,22 +75,23 @@
     <ClCompile Include="MiniDump.cpp">
       <Filter>Dump</Filter>
     </ClCompile>
-    <ClCompile Include="AcceptOperation.cpp">
-      <Filter>Network\Operation</Filter>
+    <ClCompile Include="AcceptEvent.cpp">
+      <Filter>Network\Event</Filter>
     </ClCompile>
-    <ClCompile Include="IocpOperation.cpp">
-      <Filter>Network\Operation</Filter>
+    <ClCompile Include="IocpEvent.cpp">
+      <Filter>Network\Event</Filter>
     </ClCompile>
-    <ClCompile Include="SendOperation.cpp">
-      <Filter>Network\Operation</Filter>
+    <ClCompile Include="SendEvent.cpp">
+      <Filter>Network\Event</Filter>
     </ClCompile>
-    <ClCompile Include="ReceiveOperation.cpp">
-      <Filter>Network\Operation</Filter>
+    <ClCompile Include="RecvEvent.cpp">
+      <Filter>Network\Event</Filter>
     </ClCompile>
     <ClCompile Include="IServer.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="RingBuffer.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
+    <ClCompile Include="RecvBuffer.cpp" />
   </ItemGroup>
 </Project>

@@ -4,13 +4,16 @@
 
 ListenSocket::ListenSocket(Server& server) : SocketBase(), mServer(server)
 {
-	acceptBuffer = new Buffer(eOperationType::Accept);
+	//acceptBuffer = new Buffer(eOperationType::Accept);
+	mAcceptEvent = new AcceptEvent();
 	cout << "府郊家南 积己" << endl;
 }
 
 ListenSocket::~ListenSocket()
 {
-	delete acceptBuffer;
+	delete mAcceptEvent;
+	printf("府郊家南 昏力\n");
+	//delete acceptBuffer;
 }
 
 int ListenSocket::Listen(int backlog)
@@ -27,7 +30,11 @@ int ListenSocket::Listen(int backlog)
 int ListenSocket::RegisterAccept()
 {
 	Session* newSession = mServer.GetReserveSession();
-	if (::AcceptEx(GetSocket(), newSession->GetSocket(), newSession->recvBuffer, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, &acceptBytes, acceptBuffer))
+	DWORD bytesReceived = 0;
+
+	mAcceptEvent->Init();
+
+	if (::AcceptEx(GetSocket(), newSession->GetSocket(), newSession->GetRecvBuffer().GetWriteCursor(), 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, &bytesReceived, mAcceptEvent))
 	{
 		if (WSAGetLastError() != ERROR_IO_PENDING) {
 			printf("技记 努贰胶 俊矾 - AcceptEx 角菩 (%d)\n", WSAGetLastError());
@@ -38,7 +45,7 @@ int ListenSocket::RegisterAccept()
 	return 0;
 }
 
-int ListenSocket::Accept()
+int ListenSocket::HandleAccept()
 {
 	if (mServer.GetReserveSession()->SetSockOpt(GetSocket()))
 	{

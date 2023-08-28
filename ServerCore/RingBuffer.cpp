@@ -51,11 +51,6 @@ int RingBuffer::Write(const char* data, int size)
 	return size;
 }
 
-int RingBuffer::Write(int size)
-{
-	return 0;
-}
-
 int RingBuffer::Read(char* dest, int size)
 {
 	int usedSize = GetUsedSize();

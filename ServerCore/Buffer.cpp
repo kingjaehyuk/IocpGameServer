@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Buffer.h"
 
-Buffer::Buffer(eOperationType operationType) : mOperationType(operationType)
+Buffer::Buffer(eIocpEventType eventType) : mEventType(eventType)
 {
 	Init();
 }
@@ -14,7 +14,7 @@ void Buffer::Init()
 	OffsetHigh = 0;
 	hEvent = nullptr;
 
-	ZeroMemory(&messageBuffer, MAX_BUFFER);
+	//ZeroMemory(&messageBuffer, MAX_BUFFER);
 	wsaBuffer.len = MAX_BUFFER;
-	wsaBuffer.buf = messageBuffer;
+	wsaBuffer.buf = messageBuffer->GetBuffer();
 }

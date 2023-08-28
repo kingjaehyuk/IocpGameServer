@@ -17,34 +17,47 @@ int main()
 {
     srand(time(NULL));
 
-    RingBuffer *b = new RingBuffer(15);
+    RingBuffer *b = new RingBuffer(5);
     //printf("capacity: %d\n", b->GetCapacity()); 
 
-    char randomString[10];
-    char* message = new char[10];
+    //char randomString[10];
+    //char* message = new char[10];
 
-    for (int i = 0; i < 22; i++) 
-    {
-        printf("%d회\n", i + 1);
+    //printf("시작포인터: %p | 끝  포인터: %p\n\n", b->GetBegin(), b->GetEnd());
 
-        generateRandomString(randomString, 10);
-        printf("%s, %d\n", randomString, (int)strlen(randomString));
+    //b->Write("12345", 5);
+    //printf("쓰기 완료\n");
+    //printf("쓰기포인터: %p | 읽기포인터: %p\n\n", b->GetWriteCursor(), b->GetReadCursor());
 
-        b->Write(randomString, (int)strlen(randomString) + 1);
-        printf("Write: free: %d, used: %d\n", b->GetFreeSize(), b->GetUsedSize());
-        //printf("WC: %p, RC: %p\n", b->GetWriteCursor(), b->GetReadCursor());
+    //b->Read(message, 5);
+    //printf("읽기 완료\n");
+    //printf("쓰기포인터: %p | 읽기포인터: %p\n\n", b->GetWriteCursor(), b->GetReadCursor());
 
-        b->Peek(message, 10);
-        printf("Peek : %s\n", message);
+    //b->Write("123", 3);
+    //printf("쓰기 완료\n");
+    //printf("쓰기포인터: %p | 읽기포인터: %p\n\n", b->GetWriteCursor(), b->GetReadCursor());
 
-        b->Read(message, (int)strlen(randomString) + 1);
-        printf("Read : free: %d, used: %d\n", b->GetFreeSize(), b->GetUsedSize());
-        //printf("WC: %p, RC: %p\n", b->GetWriteCursor(), b->GetReadCursor());
+    //b->Read(message, 3);
+    //printf("읽기 완료\n");
+    //printf("쓰기포인터: %p | 읽기포인터: %p\n\n", b->GetWriteCursor(), b->GetReadCursor());
 
-        printf("%s, %d\n\n", message, (int)strlen(message));
-    }
+    //b->Write("12", 2);
+    //printf("쓰기 완료\n");
+    //printf("쓰기포인터: %p | 읽기포인터: %p\n\n", b->GetWriteCursor(), b->GetReadCursor());
 
-    /*Server server(20000, 500);
+    //b->Read(message, 2);
+    //printf("읽기 완료\n");
+    //printf("쓰기포인터: %p | 읽기포인터: %p\n\n", b->GetWriteCursor(), b->GetReadCursor());
+
+    //b->Write("1", 1);
+    //printf("쓰기 완료\n");
+    //printf("쓰기포인터: %p | 읽기포인터: %p\n\n", b->GetWriteCursor(), b->GetReadCursor());
+
+    //b->Read(message, 1);
+    //printf("읽기 완료\n");
+    //printf("쓰기포인터: %p | 읽기포인터: %p\n\n", b->GetWriteCursor(), b->GetReadCursor());
+
+    Server server(20000, 500);
 
     if (server.Init())
     {
@@ -52,7 +65,7 @@ int main()
         return 1;
     }
 
-    server.Run();*/
+    server.Run();
 
     return 0;
 }

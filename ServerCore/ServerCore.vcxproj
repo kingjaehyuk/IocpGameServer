@@ -155,30 +155,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AcceptOperation.h" />
+    <ClInclude Include="AcceptEvent.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="CorePch.h" />
     <ClInclude Include="IOCP.h" />
-    <ClInclude Include="IocpOperation.h" />
+    <ClInclude Include="IocpEvent.h" />
     <ClInclude Include="IServer.h" />
     <ClInclude Include="ListenSocket.h" />
     <ClInclude Include="MiniDump.h" />
     <ClInclude Include="NetAddress.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="ReceiveOperation.h" />
+    <ClInclude Include="RecvEvent.h" />
+    <ClInclude Include="RecvBuffer.h" />
     <ClInclude Include="RingBuffer.h" />
-    <ClInclude Include="SendOperation.h" />
+    <ClInclude Include="SendEvent.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="Session.h" />
     <ClInclude Include="SocketBase.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AcceptOperation.cpp" />
+    <ClCompile Include="AcceptEvent.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="CorePch.cpp" />
     <ClCompile Include="IOCP.cpp" />
-    <ClCompile Include="IocpOperation.cpp" />
+    <ClCompile Include="IocpEvent.cpp" />
     <ClCompile Include="IServer.cpp" />
     <ClCompile Include="ListenSocket.cpp" />
     <ClCompile Include="MiniDump.cpp" />
@@ -189,9 +190,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="ReceiveOperation.cpp" />
+    <ClCompile Include="RecvEvent.cpp" />
+    <ClCompile Include="RecvBuffer.cpp" />
     <ClCompile Include="RingBuffer.cpp" />
-    <ClCompile Include="SendOperation.cpp" />
+    <ClCompile Include="SendEvent.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Session.cpp" />
     <ClCompile Include="SocketBase.cpp" />

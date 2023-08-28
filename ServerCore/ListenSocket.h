@@ -1,6 +1,7 @@
 #pragma once
 #include "SocketBase.h"
 #include "Buffer.h"
+#include "AcceptEvent.h"
 
 class Server;
 
@@ -14,12 +15,13 @@ public:
 	Server& GetServer() { return mServer; };
 
 	int RegisterAccept();
-	int Accept();
+	int HandleAccept();
 public:
-	Buffer* acceptBuffer;
-	DWORD acceptBytes = 0;
+	//Buffer* acceptBuffer;
+	//DWORD acceptBytes = 0;
 
 private:
+	AcceptEvent* mAcceptEvent;
 	Server& mServer;
 };
 

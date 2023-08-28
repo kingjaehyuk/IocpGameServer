@@ -1,8 +1,11 @@
 #pragma once
 #include "SocketBase.h"
-#include "Buffer.h"
+#include "RecvBuffer.h"
+#include "RecvEvent.h"
+#include "SendEvent.h"
 
 //constexpr int MAX_BUFFER = 1024;
+constexpr int MAX_BUFFER_CAPACITY = 1024;
 
 class Server;
 
@@ -36,15 +39,29 @@ public:
 	virtual ~Session();
 public:
 	int GetId() { return mId; }
+	RecvBuffer GetRecvBuffer() { return mRecvBuffer; }
 
-	int Recv();
+	int RegisterRecv();
+	int HandleRecv(int bytesTransferred);
+	//
+	//int RegisterSend();
+	//int HandleSend();
+
+	//int Recv();
 	int Send(const char* data, int size);
+//public:
+//	virtual int OnRecv(BYTE* buffer, int size);
+
 public:
-	Buffer* recvBuffer;
+	//Buffer* recvBuffer;
 	DWORD receiveBytes = 0;
 
 private:
 	int mId;
 	Server& mServer;
+	
+	RecvBuffer mRecvBuffer;
+	RecvEvent mRecvEvent;
+	SendEvent mSendEvent;
 };
 

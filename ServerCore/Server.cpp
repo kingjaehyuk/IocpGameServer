@@ -98,7 +98,7 @@ int Server::AddSession()
 
 	mSessionList.insert(session);
 
-	session->Recv();
+	session->RegisterRecv();
 
 	PopReserveSession();
 	return 0;
