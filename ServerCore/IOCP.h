@@ -15,9 +15,7 @@ public:
 	void Add(ListenSocket& listenSocket);
 	void Add(Session& session);
 
-
 private:
-	vector<HANDLE> hThread;
 	vector<thread*> mThreadPool;
 	HANDLE mIocpHandle;
 };

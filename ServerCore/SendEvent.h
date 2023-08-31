@@ -1,7 +1,7 @@
 #pragma once
 #include "IocpEvent.h"
 
-class SendEvent :public IocpEvent
+class SendEvent : public IocpEvent
 {
 public:
 	SendEvent();
