@@ -548,6 +548,7 @@ queue, stack은 아는거니까
 ## STL 컨테이너의 목적
 
 - 모든 컨테이너에 적용되는 표준 인터페이스
+  - 함수명이 모호해서 친절하지 않음
 - std 알고리듬은 많은 컨테이너에서 작동
 - 템플릿 기반 프로그래밍
 - 메모리 자동 관리
@@ -557,3 +558,174 @@ queue, stack은 아는거니까
 - 직접 컨테이너를 만들어보면 메모리에 관한 이해를 높일 수 있음
 - STL보단 Array기반으로
   - 게임에선 최대 할당량을 정해놓고 쓰기때문에 자동 관리가 필요없고 귀찮아질 수 있음
+
+# 템플릿 프로그래밍
+
+`template <class T>`
+
+`template <typename T>`
+
+`template <typename T, typename U>`
+
+typename이나 class나 별 차이없다.  
+근데 typename이 더 포괄적이기때문에 typename으로 쓰자.
+
+템플릿은 헤더에 선언과 구현 해야함 (h와 cpp로 나누면 안됨.)
+
+## 템플릿 특수화
+
+어떤 자료형만 특수한 로직을 넣어야할 때 사용
+
+std::vector에서 예시
+
+```cpp
+template <class T, class Allocator>
+class std::vector<T, Allocator> {} // 모든 형을 받음
+
+template <class Allocator>
+class std::vector<bool, Allocator> {} // bool을 받는 특수화
+```
+
+플랫폼에 따라 bool의 바이트수가 다름.
+근데 bool는 1비트만 있으면 됨.
+그래서, 비트시프트로 사용해서 메모리 최적화하려고 특수화를 함.
+
+## 템플릿 프로그래밍 베스트 프랙티스
+
+- 컨테이너의 경우 매우 적합
+- 컨테이너가 아닌 경우
+  - 3~4개 이상의 자료형을 다루면 템플릿 쓰자
+  - 2개 정도면 그냥 클래스 2개 만들자
+- 템플릿 메타 프로그래밍은 지양할 것
+
+# 여기까지가 C++03 (Core C++)
+
+---
+
+# auto
+
+- 자료형을 추론
+- 실제 자료형은 컴파일 중에 결정됨
+- 반드시 auto 변수를 초기화해야함
+
+## auto로 포인터와 참조
+
+- 포인터 받을 때 : `auto` or `auto*`
+- 참조 받을 때 : `auto&`
+
+- 컴파일러 어떤 형인지 추론이 가능해서 포인터는 `auto`와 `auto*` 가능함
+- 하지만 무조건 포인터를 받을 땐 가독성을 위해 `auto*`로 쓰자.
+- const 참조 받을 때도 가독성을 위해 `const auto&`로 쓰자
+- auto 보단 실제 자료형을 쓰자
+  - 템플랫 매개변수나 반복자는 허용
+
+# static_assert
+
+- 기존 assert는 런타임중에 뜸
+- static_assert는 컴파일 전에 떠서 컴파일을 불가하게 함
+
+# default / delete
+
+## default
+
+- `default`를 사용하면 컴파일러가 특정한 생성자, 연산자, 소멸자를 만들어줌
+- 비어 있는 생성자나 소멸자를 구체화할 필요가 없음
+- 기본 생성자, 연산자, 소멸자를 더 분명하게 표시할 수 있음
+  - 명확하게 표현해야 가독성 올라감
+
+## delete
+
+- `delete`를 사용하면 컴파일러가 자동으로 생성자, 소멸자, 연산자를 안만들어준다.
+- private에 넣는 트릭을 안 쓸 수 있다.
+- 올바른 에러 메세지도 나온다.
+
+```cpp
+class A
+{
+public:
+  A() = default;
+  A(const A& other) = delete;
+}
+```
+
+# final / override
+
+## final
+
+- 아무나 상속 못하게 막아준다.
+- 자식클래스들에 final를 써서 상속 못하게한다.
+- 클래스말고도 함수 오버라이딩도 막을 수 있다. (가상함수 아니면 사용 불가)
+- 컴파일 도중에 확인함
+
+```cpp
+class Alphabet final
+{
+  virtual void Print() final;
+}
+
+class A : public Alphabet // <- Alphabet은 상속을 막았으므로 에러남
+{
+  virtual void Print() override; // <- 함수 오버라이딩 막아서 에러남
+}
+```
+
+## override
+
+- 잘못된 가상 함수 오버라이딩을 막아준다.
+- 가상 함수가 아니면 컴파일에러난다.
+- 가상 함수가 아닌 것에 사용하면 컴파일에러난다.
+
+# offsetof
+
+- 특정 멤버가 본인을 포함한 자료구조(클래스)의 시작점에서 몇바이트만큼 떨어져있는지 알려줌
+- 직렬화, 역직렬화할 때 유용
+
+# nullptr
+
+- NULL
+  - `#define NULL 0`
+  - 숫자
+- nullptr
+  - `typedef decltype(nullptr) nullptr_t`
+  - null 포인터 상수
+
+포인터에 NULL말고 nullptr 쓰자
+
+# 고정 폭 정수형
+
+밑에 자료형들은 각각 몇바이트일까?
+
+- char
+- short
+- int
+- long
+- long long
+
+int형이 무조건 4바이트라는 표준이 없다.  
+c++에선 long도 4바이트지만 c#에서 long은 8바이트임.  
+64비트에선 int는 8바이트임.  
+이처럼 플랫폼마다 자료형이 다다르기때문에 애로사항이 있다.
+
+그래서 크기가 정확하게 fix된 자료형이 나왔다.
+
+- int8_t / uint8_t
+- int16_t / uint16_t
+- int32_t / uint32_t
+- int64t / uint64_t
+- intptr_t / uintptr_t
+
+# enum class
+
+c언어에서 enum은 그냥 정수이다.  
+그래서 enum끼리 비교하면 그냥 정수끼리 비교한다.  
+서로다른 enum끼리 비교해도 정수형으로 비교하는거라 에러자체가 안난다.
+
+enum class
+
+- 정수형으로 암시적 캐스팅이 없음
+- 자료형 검사를 해준다.
+- enum에 할당할 바이트 양을 정할 수 있음
+
+```cpp
+
+```
