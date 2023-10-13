@@ -729,3 +729,9 @@ enum class
 ```cpp
 
 ```
+
+# 서버 관련
+
+- beginthread, CreateThread는 std::thread로 대체
+- Interlocked는 std::atomic으로 대체
+- CriticalSection는 std::mutex와 std::lock_guard로 대체
