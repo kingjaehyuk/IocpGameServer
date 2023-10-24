@@ -160,7 +160,6 @@
     <ClInclude Include="CorePch.h" />
     <ClInclude Include="IOCP.h" />
     <ClInclude Include="IocpEvent.h" />
-    <ClInclude Include="IServer.h" />
     <ClInclude Include="ListenSocket.h" />
     <ClInclude Include="MiniDump.h" />
     <ClInclude Include="NetAddress.h" />
@@ -180,7 +179,6 @@
     <ClCompile Include="CorePch.cpp" />
     <ClCompile Include="IOCP.cpp" />
     <ClCompile Include="IocpEvent.cpp" />
-    <ClCompile Include="IServer.cpp" />
     <ClCompile Include="ListenSocket.cpp" />
     <ClCompile Include="MiniDump.cpp" />
     <ClCompile Include="NetAddress.cpp" />

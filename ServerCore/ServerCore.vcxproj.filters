@@ -16,24 +16,17 @@
     <Filter Include="Network\Event">
       <UniqueIdentifier>{54f13071-8124-41cc-8718-52b1e9b8ddc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{8debd9e9-b519-4e08-91e5-3e3de68cdd10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{257d132d-0d49-4053-b839-c0392ab5f5cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="CorePch.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="IOCP.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="Session.h" />
-    <ClInclude Include="ListenSocket.h" />
-    <ClInclude Include="SocketBase.h" />
-    <ClInclude Include="NetAddress.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="MiniDump.h">
       <Filter>Dump</Filter>
@@ -50,27 +43,39 @@
     <ClInclude Include="RecvEvent.h">
       <Filter>Network\Event</Filter>
     </ClInclude>
-    <ClInclude Include="IServer.h" />
-    <ClInclude Include="Buffer.h" />
     <ClInclude Include="RingBuffer.h">
       <Filter>Memory</Filter>
     </ClInclude>
-    <ClInclude Include="RecvBuffer.h" />
+    <ClInclude Include="CorePch.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketBase.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="NetAddress.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ListenSocket.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="RecvBuffer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="CorePch.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="IOCP.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="Session.cpp" />
-    <ClCompile Include="ListenSocket.cpp" />
-    <ClCompile Include="SocketBase.cpp" />
-    <ClCompile Include="NetAddress.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="MiniDump.cpp">
       <Filter>Dump</Filter>
@@ -87,11 +92,30 @@
     <ClCompile Include="RecvEvent.cpp">
       <Filter>Network\Event</Filter>
     </ClCompile>
-    <ClCompile Include="IServer.cpp" />
-    <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="RingBuffer.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
-    <ClCompile Include="RecvBuffer.cpp" />
+    <ClCompile Include="CorePch.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketBase.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="NetAddress.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="ListenSocket.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="RecvBuffer.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Buffer.cpp" />
   </ItemGroup>
 </Project>
